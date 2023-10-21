@@ -1,0 +1,222 @@
+{
+    "name": "Controls",
+    "maps": [
+        {
+            "name": "Player1",
+            "id": "87a1d37c-847e-4010-ab71-dbf1cc090e9e",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "2eafcf42-3c9a-433b-96ce-f535b5ac1d13",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Movement",
+                    "type": "Button",
+                    "id": "b9510ebd-929b-4515-b884-94f45956f8c3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "060dc8c1-017e-4b26-b0ae-46211a3bfba4",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "189f84e6-f226-4871-a164-797f0eafb769",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "2f0efb29-8d24-40a7-aac1-372506d84fd6",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "268cb4d1-cc74-4aed-a09e-d00037499f32",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Player2",
+            "id": "cf71f742-0380-497f-ae3d-61eac6eb65e5",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "2c4e11d4-7ee1-4ac1-a161-1917d58d1e9b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Movement",
+                    "type": "Button",
+                    "id": "3e8c1f96-649d-43fc-b048-e283f9dd08c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "47145943-5fdf-4f84-949d-d863f334c0d2",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "0c2bc35f-d05e-4a5f-a095-9006f940cd26",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "057433a0-493a-4f05-90a3-d8318e6863f2",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "5b6b921e-b541-4037-805e-e542cd2f56aa",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Player3",
+            "id": "9e747b34-65e6-4e25-9133-7bea5a2f49f0",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "a98563b7-6bda-4035-b797-fd93f3b4e17d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Movement",
+                    "type": "Button",
+                    "id": "249be371-cfce-4919-94a1-4ba2569164a9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "48327d73-5dac-474f-a6e0-fb12020293df",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "33af50e1-dd7d-49b8-8e95-aa42e0d9ac10",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "6117edd1-a9d1-4438-977b-bfe5575fc0dd",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "2a452824-e466-4a7e-a7ae-8554778d4903",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": []
+        }
+    ]
+}

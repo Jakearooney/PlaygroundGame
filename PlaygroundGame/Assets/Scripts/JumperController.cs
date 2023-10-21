@@ -1,47 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class JumperController : MonoBehaviour
 {
-    [SerializeField] private KeyCode leftKey;
-    [SerializeField] private KeyCode rightKey;
-    [SerializeField] private KeyCode jumpKey;
-
+    //Movement
     [SerializeField] private float jumpPower;
     [SerializeField] private float moveSpeed;
-
     private Rigidbody rb;
 
-    private void Start()
+    //Inputs
+    [SerializeField] private int playerID;
+    [SerializeField] private InputActionAsset controls;
+    private InputActionMap controlMap;
+    private float movement;
+
+    //Jumping
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private bool isGrounded;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        //Selects the correct action map for this player
+        controlMap = controls.actionMaps[playerID];
+
+        //Movement
+        controlMap.actions[1].performed += ctx => movement = ctx.ReadValue<float>();
+        controlMap.actions[1].canceled += _ => movement = 0;
+
+        //Jump
+        controlMap.actions[0].started += _ => Jump();
+    }
+
+    //Enables and disables the controls when the player is turned on and off
+    private void OnEnable()
+    {
+        controlMap.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controlMap.Disable();
+    }
+
+    private void Jump()
+    {
+        if (isGrounded)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity = new Vector2(movement * moveSpeed, rb.velocity.y * 1.025f);
+        }
+        else
+        {
+            rb.velocity = new Vector2(movement * moveSpeed, rb.velocity.y);
+        }
     }
 
     private void Update()
     {
-        Vector3 newVelocity = rb.velocity;
-
-        if (Input.GetKey(leftKey))
-        {
-            newVelocity.x = -moveSpeed;
-        }
-        
-        if (Input.GetKey(rightKey))
-        {
-            newVelocity.x = moveSpeed;
-        }
-        
-        if (Input.GetKeyDown(jumpKey))
-        {
-            rb.AddForce(Vector3.up * jumpPower);
-        }
-
-        if (newVelocity.y < 0f)
-        {
-            newVelocity.y -= 0.003f;
-        }
-
-        rb.velocity = newVelocity;
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f, groundMask);
     }
 }
