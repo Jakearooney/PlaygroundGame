@@ -18,7 +18,7 @@ public class LevelScrolling : MonoBehaviour
         // Calculate the distance between start and end positions
         journeyLength = Vector3.Distance(startPosition.position, endPosition.position);
 
-        StartLerp();
+        //StartLerp();
     }
 
     void Update()
