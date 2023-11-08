@@ -5,7 +5,7 @@ using Codice.CM.Common;
 [CustomEditor(typeof(LevelDesign))]
 public class LevelMakier : Editor
 {
-	private string[] tabs = { "Normal Platforms", "Option two", "Option three", "Assets" };
+	private string[] tabs = { "Normal Platforms", "Option two", "Platform Assets", "Background Assets" };
 	private int tabSelected = -1;
 
 	private GameObject smallPlatform;
@@ -16,6 +16,11 @@ public class LevelMakier : Editor
 	private GameObject rock1Prefab;
 	private GameObject rock2Prefab;
 	private GameObject barrelPrefab;
+
+	private GameObject platformShieldPrefab;
+	private GameObject platformRock1Prefab;
+	private GameObject platformRock2Prefab;
+	private GameObject platformBarrelPrefab;
 
 	float spawnRadious = 5f;
 	//private string tname;
@@ -36,10 +41,10 @@ public class LevelMakier : Editor
 				case "Option two":
 					OptionTwo();
 					break;
-				case "Option three":
+				case "Platform Assets":
 					OptionThree();
 					break;
-				case "Assets":
+				case "Background Assets":
 					OptionFour();
 					break;
 			}
@@ -76,6 +81,12 @@ public class LevelMakier : Editor
 		{
 			SpawnLargePlatform();
 		}
+
+		largePlatform = EditorGUILayout.ObjectField("Prefab to search for", largePlatform, typeof(GameObject), false) as GameObject;
+		if (GUILayout.Button("Spawn Large Platform"))
+		{
+			SpawnLargePlatform();
+		}
 		EditorGUILayout.Space(10);
 		EditorGUILayout.EndVertical();
 	}
@@ -87,12 +98,47 @@ public class LevelMakier : Editor
 
 	private void OptionThree()
 	{
-		EditorGUILayout.HelpBox("Three", MessageType.Warning);
+		EditorGUILayout.LabelField("Platform Asset Spawner", EditorStyles.boldLabel);
+		EditorGUILayout.Space(10);
+		EditorGUILayout.BeginVertical();
+		EditorGUILayout.Space(10);
+
+		spawnRadious = EditorGUILayout.FloatField("Spawn Radious", spawnRadious);
+
+		EditorGUILayout.Space(10);
+		platformShieldPrefab = EditorGUILayout.ObjectField("Prefab to search for", platformShieldPrefab, typeof(GameObject), false) as GameObject;
+		if (GUILayout.Button("Spawn Small shield Platform"))
+		{
+			ShieldAssetPlatform();
+		}
+		EditorGUILayout.Space(10);
+
+		platformRock1Prefab = EditorGUILayout.ObjectField("Prefab to search for", platformRock1Prefab, typeof(GameObject), false) as GameObject;
+		if (GUILayout.Button("Spawn small rock1 Platform"))
+		{
+			RockOnePlatform();
+		}
+		EditorGUILayout.Space(10);
+
+		platformRock2Prefab = EditorGUILayout.ObjectField("Prefab to search for", platformRock2Prefab, typeof(GameObject), false) as GameObject;
+		if (GUILayout.Button("Spawn small rock2 Platform"))
+		{
+			RockTwoPlatform();
+		}
+		EditorGUILayout.Space(10);
+
+		platformBarrelPrefab = EditorGUILayout.ObjectField("Prefab to search for", platformBarrelPrefab, typeof(GameObject), false) as GameObject;
+		if (GUILayout.Button("Spawn small barrel Platform"))
+		{
+			BarrelPlatform();
+		}
+		EditorGUILayout.Space(10);
+		EditorGUILayout.EndVertical();
 	}
 
 	private void OptionFour()
 	{
-		EditorGUILayout.LabelField("Asset Spawner Tab", EditorStyles.boldLabel);
+		EditorGUILayout.LabelField("Asset Background Spawner Tab", EditorStyles.boldLabel);
 		EditorGUILayout.Space(10);
 		EditorGUILayout.BeginVertical();
 		EditorGUILayout.Space(10);
@@ -232,8 +278,65 @@ public class LevelMakier : Editor
 
 		GameObject newObject = Instantiate(barrelPrefab, spawnPos, Quaternion.identity);
 	}
+	#endregion
 
+	#region Asset spawner for Platforms
+	//This will spawn different assets into the level of the game.
+	private void ShieldAssetPlatform()
+	{
+		if (platformShieldPrefab == null)
+		{
+			Debug.LogError("Error: Please assign an object to be spawned");
+			return;
+		}
 
+		Vector2 spawnCircle = Random.insideUnitCircle * spawnRadious;
+		Vector3 spawnPos = new Vector3(spawnCircle.x, spawnCircle.y, 0f);
+
+		GameObject newObject = Instantiate(platformShieldPrefab, spawnPos, Quaternion.identity);
+	}
+
+	private void RockOnePlatform()
+	{
+		if (platformRock1Prefab == null)
+		{
+			Debug.LogError("Error: Please assign an object to be spawned");
+			return;
+		}
+
+		Vector2 spawnCircle = Random.insideUnitCircle * spawnRadious;
+		Vector3 spawnPos = new Vector3(spawnCircle.x, spawnCircle.y, 0f);
+
+		GameObject newObject = Instantiate(platformRock1Prefab, spawnPos, Quaternion.identity);
+	}
+
+	private void RockTwoPlatform()
+	{
+		if (platformRock2Prefab == null)
+		{
+			Debug.LogError("Error: Please assign an object to be spawned");
+			return;
+		}
+
+		Vector2 spawnCircle = Random.insideUnitCircle * spawnRadious;
+		Vector3 spawnPos = new Vector3(spawnCircle.x, spawnCircle.y, 0f);
+
+		GameObject newObject = Instantiate(platformRock2Prefab, spawnPos, Quaternion.identity);
+	}
+
+	private void BarrelPlatform()
+	{
+		if (platformBarrelPrefab == null)
+		{
+			Debug.LogError("Error: Please assign an object to be spawned");
+			return;
+		}
+
+		Vector2 spawnCircle = Random.insideUnitCircle * spawnRadious;
+		Vector3 spawnPos = new Vector3(spawnCircle.x, spawnCircle.y, 0f);
+
+		GameObject newObject = Instantiate(platformBarrelPrefab, spawnPos, Quaternion.identity);
+	}
 	#endregion
 
 	#region save and clear prefab informaiton
