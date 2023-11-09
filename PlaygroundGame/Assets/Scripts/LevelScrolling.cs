@@ -4,48 +4,38 @@ using UnityEngine;
 
 public class LevelScrolling : MonoBehaviour
 {
-    [SerializeField] private Transform startPosition;
-    [SerializeField] private Transform endPosition;
-    [SerializeField] private float lerpSpeed = 2.0f;
+    [SerializeField] private float duration = 2.0f;
+	[SerializeField] private float safezoneTime = 5f;
+	[SerializeField] private GameObject[] checkpoints;
+	private int checkpointIndex = 0;
 
-    private float journeyLength;
-    private float startTime;
+	private void Start()
+	{
+		StartCoroutine(MoveToNextCheckpoint());
+	}
 
-    private bool isLerping = false;
+	private IEnumerator MoveToNextCheckpoint()
+	{
+		if (checkpointIndex < checkpoints.Length - 1)
+		{
+			float elapsedTime = 0f;
 
-    void Start()
-    {
-        // Calculate the distance between start and end positions
-        journeyLength = Vector3.Distance(startPosition.position, endPosition.position);
+			while (elapsedTime < duration)
+			{
+				transform.position = Vector3.Lerp(checkpoints[checkpointIndex].transform.position, checkpoints[checkpointIndex + 1].transform.position, elapsedTime / duration);
+				elapsedTime += Time.deltaTime;
+				yield return null;
+			}
 
-        //StartLerp();
-    }
+			// Ensure that the object ends up exactly at the target position
+			transform.position = checkpoints[checkpointIndex + 1].transform.position;
+			checkpointIndex++;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && !isLerping)
-        {
-            StartLerp();
-        }
+			yield return new WaitForSeconds(safezoneTime);
 
-        if (isLerping)
-        {
-            float distanceCovered = (Time.time - startTime) * lerpSpeed;
-            float journeyFraction = distanceCovered / journeyLength;
+			Debug.Log("Finished");
 
-            // Lerp the object's position
-            transform.position = Vector3.Lerp(startPosition.position, endPosition.position, journeyFraction);
-
-            if (journeyFraction >= 1.0f)
-            {
-                isLerping = false;
-            }
-        }
-    }
-
-    void StartLerp()
-    {
-        startTime = Time.time;
-        isLerping = true;
-    }
+			StartCoroutine(MoveToNextCheckpoint());
+		}
+	}
 }

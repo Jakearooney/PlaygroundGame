@@ -9,7 +9,7 @@ public class Hazard : MonoBehaviour
         //Temporary killing
         if (collision.gameObject.layer == 6)
         {
-            collision.gameObject.transform.position = new Vector3(-25f, -10f, 0);
+            collision.gameObject.SetActive(false);
         }
     }
 }
