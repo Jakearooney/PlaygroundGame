@@ -10,6 +10,9 @@ public class LevelScrolling : MonoBehaviour
 	[SerializeField] private GameObject[] checkpoints;
 	private int checkpointIndex = 0;
 
+	[SerializeField] private GameObject[] sections;
+	private int sectionIndex = 0;
+
 	public UnityEvent CooldownStarted;
 	public UnityEvent CooldownEnded;
 
@@ -20,7 +23,9 @@ public class LevelScrolling : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && canStart)
 		{
 			canStart = false;
-            StartCoroutine(MoveToNextCheckpoint());
+			StartCoroutine(MoveToNextCheckpoint());
+			sections[sectionIndex].SetActive(true);
+            sectionIndex++;
         }
     }
 
