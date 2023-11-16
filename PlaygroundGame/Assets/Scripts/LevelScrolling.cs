@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LevelScrolling : MonoBehaviour
 {
@@ -9,12 +10,26 @@ public class LevelScrolling : MonoBehaviour
 	[SerializeField] private GameObject[] checkpoints;
 	private int checkpointIndex = 0;
 
-	private void Start()
-	{
-		StartCoroutine(MoveToNextCheckpoint());
-	}
+	[SerializeField] private GameObject[] sections;
+	private int sectionIndex = 0;
 
-	private IEnumerator MoveToNextCheckpoint()
+	public UnityEvent CooldownStarted;
+	public UnityEvent CooldownEnded;
+
+	[SerializeField] private bool canStart = true;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && canStart)
+		{
+			canStart = false;
+			StartCoroutine(MoveToNextCheckpoint());
+			sections[sectionIndex].SetActive(true);
+            sectionIndex++;
+        }
+    }
+
+    private IEnumerator MoveToNextCheckpoint()
 	{
 		if (checkpointIndex < checkpoints.Length - 1)
 		{
@@ -31,11 +46,13 @@ public class LevelScrolling : MonoBehaviour
 			transform.position = checkpoints[checkpointIndex + 1].transform.position;
 			checkpointIndex++;
 
+			CooldownStarted?.Invoke();
+
 			yield return new WaitForSeconds(safezoneTime);
 
-			Debug.Log("Finished");
+			CooldownEnded?.Invoke();
 
-			StartCoroutine(MoveToNextCheckpoint());
+			canStart = true;
 		}
 	}
 }
