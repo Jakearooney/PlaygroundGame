@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.VFX;
 
 [Serializable]
@@ -15,10 +16,12 @@ public struct Obstacle
 public class LavaKingController : MonoBehaviour
 {
     [SerializeField] private List<Obstacle> obstacles;
-    [SerializeField] private List<Obstacle> placementList = new List<Obstacle>();
+    private List<Obstacle> placementList = new List<Obstacle>();
 
     [SerializeField] private LayerMask wallMask;
     [SerializeField] private LayerMask inverseWallMask;
+
+    [SerializeField] private Image[] UIElements;
 
     [SerializeField] private float placementDelay = 5f;
     [SerializeField] private bool canPlace = true;
@@ -26,6 +29,7 @@ public class LavaKingController : MonoBehaviour
     private void Start()
     {
         RandomizeObstacles();
+        UpdateUI();
     }
 
     void Update()
@@ -48,8 +52,12 @@ public class LavaKingController : MonoBehaviour
                 {
                     Obstacle obstacle = placementList[0];
                     placementList.RemoveAt(0);
-                    Instantiate(obstacle.obj, spawnPosition, Quaternion.identity);
+                    Instantiate(obstacle.obj, spawnPosition, obstacle.obj.transform.rotation);
                     placementList.Add(obstacle);
+
+                    UpdateUI();
+
+                    StartCoroutine(PlacementDelay());
                 }
                 else
                 {
@@ -75,5 +83,13 @@ public class LavaKingController : MonoBehaviour
         canPlace = false;
         yield return new WaitForSeconds(placementDelay);
         canPlace = true;
+    }
+
+    private void UpdateUI()
+    {
+        for (int i = 0; i < UIElements.Length; i++)
+        {
+            UIElements[i].sprite = placementList[i].icon;
+        }
     }
 }
