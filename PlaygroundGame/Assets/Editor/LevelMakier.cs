@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEditor;
 using Codice.CM.Common;
 
-[CustomEditor(typeof(LevelDesign))]
-public class LevelMakier : Editor
+[CustomEditor(typeof(Editor))]
+public class LevelMakier : EditorWindow
 {
-	private string[] tabs = { "Normal Platforms", "Option two", "Platform Assets", "Background Assets" };
+	private string[] tabs = { "Normal Platforms", "Platform Assets", "Background Assets" };
 	private int tabSelected = -1;
 
 	private GameObject smallPlatform;
@@ -22,13 +22,19 @@ public class LevelMakier : Editor
 	private GameObject platformRock2Prefab;
 	private GameObject platformBarrelPrefab;
 
-	float spawnRadious = 5f;
+	float spawnRadious = 4f;
 	//private string tname;
 
-	public override void OnInspectorGUI()
+	[MenuItem("Tools/ Level Maker")]
+	public static void ShowWindow()
+	{
+		EditorWindow.GetWindow(typeof(LevelMakier));
+	}
+
+	public void OnGUI()
 	{
 		EditorGUILayout.BeginVertical();
-		tabSelected = GUILayout.SelectionGrid(tabSelected, tabs, 2);
+		tabSelected = GUILayout.SelectionGrid(tabSelected, tabs, 3);
 		EditorGUILayout.EndVertical();
 
 		if (tabSelected >= 0)
@@ -37,9 +43,6 @@ public class LevelMakier : Editor
 			{
 				case "Normal Platforms":
 					OptionOne();
-					break;
-				case "Option two":
-					OptionTwo();
 					break;
 				case "Platform Assets":
 					OptionThree();
@@ -60,9 +63,8 @@ public class LevelMakier : Editor
 		EditorGUILayout.Space(10);
 
 		spawnRadious = EditorGUILayout.FloatField("Spawn Radious", spawnRadious);
-
 		EditorGUILayout.Space(10);
-		smallPlatform = EditorGUILayout.ObjectField("Prefab to search for", smallPlatform, typeof(GameObject), false) as GameObject;
+		smallPlatform = EditorGUILayout.ObjectField("Spawn Small Platform", smallPlatform, typeof(GameObject), false) as GameObject;
 		if(GUILayout.Button("Spawn Small Platform"))
 		{
 			SpawnSmallPlatform();
@@ -82,18 +84,7 @@ public class LevelMakier : Editor
 			SpawnLargePlatform();
 		}
 
-		largePlatform = EditorGUILayout.ObjectField("Prefab to search for", largePlatform, typeof(GameObject), false) as GameObject;
-		if (GUILayout.Button("Spawn Large Platform"))
-		{
-			SpawnLargePlatform();
-		}
-		EditorGUILayout.Space(10);
 		EditorGUILayout.EndVertical();
-	}
-
-	private void OptionTwo()
-	{
-		EditorGUILayout.HelpBox("Two", MessageType.Info);
 	}
 
 	private void OptionThree()
@@ -340,42 +331,17 @@ public class LevelMakier : Editor
 	#endregion
 
 	#region save and clear prefab informaiton
-	//private bool CanSave()
-	//{
-	//	if (string.IsNullOrEmpty(tname))
-	//	{
-	//		return false;
-	//	}
+	private void OnEnable()
+	{
+		string smallPlatform = EditorPrefs.GetString("Spawn Small Platform", JsonUtility.ToJson(this, false));
+		JsonUtility.FromJsonOverwrite(smallPlatform, this);
+	}
 
-	//	if (type == ObjectType.Empty)
-	//	{
-	//		return false;
-	//	}
-
-	//	return true;
-	//}
-
-	//private bool CanClear()
-	//{
-	//	if(type == ObjectType.Empty)
-	//	{
-	//		return false;
-	//	}
-
-	//	return true;
-	//}
-
-	//private void OnEnable()
-	//{
-	//	string smallPlatform = EditorPrefs.GetString("SmallPlatform", JsonUtility.ToJson(this, false));
-	//	JsonUtility.FromJsonOverwrite(smallPlatform, this);
-	//}
-
-	//private void OnDisable()
-	//{
-	//	string data = JsonUtility.ToJson(this, false);
-	//	EditorPrefs.SetString("smallPlatform", data);
-	//	Debug.Log("Current Terrian info Saved");
-	//}
+	private void OnDisable()
+	{
+		string data = JsonUtility.ToJson(this, false);
+		EditorPrefs.SetString("Spawn Small Platform", data);
+		Debug.Log("Current Terrian info Saved");
+	}
 	#endregion
 }
