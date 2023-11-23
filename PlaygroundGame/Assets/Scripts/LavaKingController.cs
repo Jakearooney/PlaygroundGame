@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,6 +26,8 @@ public class LavaKingController : MonoBehaviour
 
     [SerializeField] private float placementDelay = 5f;
     [SerializeField] private bool canPlace = true;
+
+    [SerializeField] private TextMeshProUGUI cooldownTimerText;
 
     private void Start()
     {
@@ -81,7 +84,17 @@ public class LavaKingController : MonoBehaviour
     private IEnumerator PlacementDelay()
     {
         canPlace = false;
-        yield return new WaitForSeconds(placementDelay);
+        float remainingTime = placementDelay;
+
+        while (remainingTime > 0)
+        {
+            // Update the cooldown timer text each frame
+            cooldownTimerText.text = remainingTime.ToString("F1") + "s"; // Formats the time to one decimal place
+            yield return new WaitForSeconds(0.1f); // Update every 0.1 seconds
+            remainingTime -= 0.1f;
+        }
+
+        cooldownTimerText.text = "Ready!"; // Or any other message you'd like to display when the cooldown is over
         canPlace = true;
     }
 

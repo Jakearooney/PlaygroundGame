@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class CanvasSwap : MonoBehaviour
@@ -13,6 +15,11 @@ public class CanvasSwap : MonoBehaviour
 
     [SerializeField] private GameObject[] playerObjects;
     public bool[] playerActive;
+    public bool snakeActive;
+    [SerializeField] GameObject firstLevelSection;
+
+    [SerializeField] private TextMeshProUGUI[] soldierStatuses;
+    [SerializeField] private GameObject[] soldierText;
 
     private void Start()
     {
@@ -43,11 +50,33 @@ public class CanvasSwap : MonoBehaviour
     private void Update()
 	{
 		PauseGame();
-	}
+        UpdateSoldierStatuses();
+    }
+
+    private void UpdateSoldierStatuses()
+    {
+        for (int i = 0; i < playerObjects.Length; i++)
+        {
+            if (playerObjects[i].activeSelf)
+            {
+                soldierStatuses[i].text = "Alive";
+            }
+            else
+            {
+                soldierStatuses[i].text = "Stoned";
+            }
+        }
+    }
 
     public void togglePlayer(int playerToggled)
     {
         playerActive[playerToggled] = !playerActive[playerToggled];
+        soldierText[playerToggled].SetActive(playerActive[playerToggled]);
+    }
+
+    public void toggleSnake()
+    {
+        snakeActive = !snakeActive;
     }
 
 
@@ -57,6 +86,19 @@ public class CanvasSwap : MonoBehaviour
         {
             bool playerSpawns = playerActive[i];
             playerObjects[i].SetActive(playerSpawns);
+        }
+    }
+
+    public void startGame()
+    {
+        Debug.Log("FunctionCalled");
+        if (snakeActive && playerActive.Any(b => b))
+        {
+            Debug.Log("FunctionActuallyStarted");
+            ToggleCanvasGroup("gamelobbymenu");
+            ToggleCanvasGroup("gamescreenmenu");
+            firstLevelSection.SetActive(true);
+            spawnPlayers();
         }
     }
 

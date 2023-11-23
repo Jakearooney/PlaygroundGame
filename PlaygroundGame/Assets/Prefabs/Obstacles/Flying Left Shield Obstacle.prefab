@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2765750671076759698}
   - component: {fileID: 5715879137092354383}
   - component: {fileID: 6881389013036669484}
+  - component: {fileID: -1426160158492043542}
   m_Layer: 0
   m_Name: Flying Left Shield Obstacle
   m_TagString: Untagged
@@ -96,6 +97,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-1426160158492043542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7197325294542924854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5683abb0bdf20540bb262b9cf5c6ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &9038664943324506696
 PrefabInstance:
   m_ObjectHideFlags: 0

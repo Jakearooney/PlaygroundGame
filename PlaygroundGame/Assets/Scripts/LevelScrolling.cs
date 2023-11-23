@@ -24,7 +24,11 @@ public class LevelScrolling : MonoBehaviour
 		{
 			canStart = false;
 			StartCoroutine(MoveToNextCheckpoint());
-			sections[sectionIndex].SetActive(true);
+
+			if (sections.Length > 0)
+			{
+                sections[sectionIndex].SetActive(true);
+            }
             sectionIndex++;
         }
     }
