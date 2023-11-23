@@ -11,6 +11,9 @@ public class CanvasSwap : MonoBehaviour
     [SerializeField] private GameObject audioPanel;
     [SerializeField] private GameObject controlsPanel;
 
+    [SerializeField] private GameObject[] playerObjects;
+    public bool[] playerActive;
+
     private void Start()
     {
         // Initialize and populate the dictionary
@@ -28,6 +31,9 @@ public class CanvasSwap : MonoBehaviour
             {"wingameenemymenu", winScreenEnemyUI}
         };
 
+        playerActive = new bool[playerObjects.Length];
+
+
         settingsPanels = new Dictionary<string, GameObject>
         {
             {"audio", audioPanel},
@@ -39,9 +45,24 @@ public class CanvasSwap : MonoBehaviour
 		PauseGame();
 	}
 
-	#region Variables for Canvas Groups
-	//Canvas Active Group
-	[SerializeField] private CanvasGroup titleScreenUI;
+    public void togglePlayer(int playerToggled)
+    {
+        playerActive[playerToggled] = !playerActive[playerToggled];
+    }
+
+
+    public void spawnPlayers()
+    {
+        for (int i = 0; i < playerObjects.Length; i++)
+        {
+            bool playerSpawns = playerActive[i];
+            playerObjects[i].SetActive(playerSpawns);
+        }
+    }
+
+    #region Variables for Canvas Groups
+    //Canvas Active Group
+    [SerializeField] private CanvasGroup titleScreenUI;
 	[SerializeField] private CanvasGroup mainMenuUI;
 	[SerializeField] private CanvasGroup exitMenuUI;
     [SerializeField] private CanvasGroup tutorialMenuUI;
