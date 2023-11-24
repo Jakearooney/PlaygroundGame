@@ -2,9 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CanvasSwap : MonoBehaviour
 {
+    [SerializeField] private LevelScrolling levelManager;
+
 	private string previousMenu;
     private Dictionary<string, CanvasGroup> canvasGroups;
 
@@ -13,13 +16,17 @@ public class CanvasSwap : MonoBehaviour
     [SerializeField] private GameObject audioPanel;
     [SerializeField] private GameObject controlsPanel;
 
-    [SerializeField] private GameObject[] playerObjects;
+    [SerializeField] public GameObject[] playerObjects;
     public bool[] playerActive;
     public bool snakeActive;
     [SerializeField] GameObject firstLevelSection;
 
     [SerializeField] private TextMeshProUGUI[] soldierStatuses;
     [SerializeField] private GameObject[] soldierText;
+
+    [SerializeField] private JumperController[] soldierControllers;
+
+    public static string nextActiveMenu; // Holds the name of the menu to activate after scene reload
 
     private void Start()
     {
@@ -40,17 +47,29 @@ public class CanvasSwap : MonoBehaviour
 
         playerActive = new bool[playerObjects.Length];
 
-
         settingsPanels = new Dictionary<string, GameObject>
         {
             {"audio", audioPanel},
             {"controls", controlsPanel }
         };
+
+        if (!string.IsNullOrEmpty(nextActiveMenu))
+        {
+            ToggleCanvasGroup("titlescreen");
+            ToggleCanvasGroup(nextActiveMenu);
+            nextActiveMenu = ""; // Clear the static variable after toggling the menu
+        }
     }
     private void Update()
 	{
 		PauseGame();
         UpdateSoldierStatuses();
+    }
+
+    public void RestartGameToMenu(string menuName)
+    {
+        nextActiveMenu = menuName; // Set the next menu to be opened after the scene loads
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void UpdateSoldierStatuses()
@@ -99,6 +118,7 @@ public class CanvasSwap : MonoBehaviour
             ToggleCanvasGroup("gamescreenmenu");
             firstLevelSection.SetActive(true);
             spawnPlayers();
+            levelManager.canStart = true;
         }
     }
 
@@ -143,7 +163,7 @@ public class CanvasSwap : MonoBehaviour
 	//Pause game with escape key
 	private void PauseGame()
 	{
-		if(Input.GetKeyDown(KeyCode.Escape) && gameScreenUI.alpha != 0)
+		if(Input.GetKeyDown(KeyCode.Escape) && gameScreenUI.alpha != 0 && levelManager.canStart)
 		{
             ToggleCanvasGroup("pausemenu");
             ToggleCanvasGroup("gamescreenmenu");
@@ -173,6 +193,4 @@ public class CanvasSwap : MonoBehaviour
             }
         }
     }
-
-
 }

@@ -27,15 +27,45 @@ public class JumperController : MonoBehaviour
         //Selects the correct action map for this player
         controlMap = controls.actionMaps[playerID];
 
-        //Movement
-        controlMap.actions[1].performed += ctx => movement = ctx.ReadValue<float>();
-        controlMap.actions[1].canceled += _ => movement = 0;
-
-        //Jump
-        controlMap.actions[0].started += _ => Jump();
+        // Subscribe to actions
+        SubscribeToActions();
     }
 
-    //Enables and disables the controls when the player is turned on and off
+    private void SubscribeToActions()
+    {
+        // Movement
+        controlMap.actions[1].performed += OnMovePerformed;
+        controlMap.actions[1].canceled += OnMoveCanceled;
+
+        // Jump
+        controlMap.actions[0].started += OnJumpStarted;
+    }
+
+    private void UnsubscribeFromActions()
+    {
+        // Movement
+        controlMap.actions[1].performed -= OnMovePerformed;
+        controlMap.actions[1].canceled -= OnMoveCanceled;
+
+        // Jump
+        controlMap.actions[0].started -= OnJumpStarted;
+    }
+
+    private void OnMovePerformed(InputAction.CallbackContext ctx)
+    {
+        movement = ctx.ReadValue<float>();
+    }
+
+    private void OnMoveCanceled(InputAction.CallbackContext ctx)
+    {
+        movement = 0;
+    }
+
+    private void OnJumpStarted(InputAction.CallbackContext ctx)
+    {
+        Jump();
+    }
+
     private void OnEnable()
     {
         controlMap.Enable();
@@ -44,6 +74,12 @@ public class JumperController : MonoBehaviour
     private void OnDisable()
     {
         controlMap.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from actions
+        UnsubscribeFromActions();
     }
 
     private void Jump()
@@ -56,6 +92,7 @@ public class JumperController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Keep the original movement logic
         if (rb.velocity.y < 0)
         {
             rb.velocity = new Vector2(movement * moveSpeed, rb.velocity.y * 1.025f);
