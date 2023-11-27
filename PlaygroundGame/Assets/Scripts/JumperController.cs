@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class JumperController : MonoBehaviour
 {
@@ -20,15 +21,28 @@ public class JumperController : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private bool isGrounded;
 
+    private AudioSource playerAudioSource; // Reference to the AudioSource component
+    public Slider soundEffectSlider;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        playerAudioSource = GetComponent<AudioSource>(); // Get the AudioSource component
+
+        soundEffectSlider.value = playerAudioSource.volume;
 
         //Selects the correct action map for this player
         controlMap = controls.actionMaps[playerID];
 
         // Subscribe to actions
         SubscribeToActions();
+
+        if (PlayerPrefs.HasKey("SoundEffectVolume"))
+        {
+            float savedVolume = PlayerPrefs.GetFloat("SoundEffectVolume");
+            soundEffectSlider.value = savedVolume;
+            playerAudioSource.volume = savedVolume;
+        }
     }
 
     private void SubscribeToActions()
@@ -82,11 +96,18 @@ public class JumperController : MonoBehaviour
         UnsubscribeFromActions();
     }
 
+    public void OnSoundEffectVolumeChange()
+    {
+        playerAudioSource.volume = soundEffectSlider.value;
+        PlayerPrefs.SetFloat("SoundEffectVolume", soundEffectSlider.value);
+    }
+
     private void Jump()
     {
         if (isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            playerAudioSource.Play(); // Play the jump sound
         }
     }
 
