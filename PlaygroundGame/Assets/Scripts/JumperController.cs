@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class JumperController : MonoBehaviour
 {
+    [SerializeField] private VolumeManager volumeManagerScript;
+
     //Movement
     [SerializeField] private float jumpPower;
     [SerializeField] private float moveSpeed;
@@ -22,27 +24,20 @@ public class JumperController : MonoBehaviour
     [SerializeField] private bool isGrounded;
 
     private AudioSource playerAudioSource; // Reference to the AudioSource component
-    public Slider soundEffectSlider;
 
     private void Awake()
     {
+        Debug.Log("AwokenPlayer");
         rb = GetComponent<Rigidbody>();
         playerAudioSource = GetComponent<AudioSource>(); // Get the AudioSource component
 
-        soundEffectSlider.value = playerAudioSource.volume;
+        playerAudioSource.volume = volumeManagerScript.soundEffectVolume;
 
         //Selects the correct action map for this player
         controlMap = controls.actionMaps[playerID];
 
         // Subscribe to actions
         SubscribeToActions();
-
-        if (PlayerPrefs.HasKey("SoundEffectVolume"))
-        {
-            float savedVolume = PlayerPrefs.GetFloat("SoundEffectVolume");
-            soundEffectSlider.value = savedVolume;
-            playerAudioSource.volume = savedVolume;
-        }
     }
 
     private void SubscribeToActions()
@@ -94,12 +89,6 @@ public class JumperController : MonoBehaviour
     {
         // Unsubscribe from actions
         UnsubscribeFromActions();
-    }
-
-    public void OnSoundEffectVolumeChange()
-    {
-        playerAudioSource.volume = soundEffectSlider.value;
-        PlayerPrefs.SetFloat("SoundEffectVolume", soundEffectSlider.value);
     }
 
     private void Jump()

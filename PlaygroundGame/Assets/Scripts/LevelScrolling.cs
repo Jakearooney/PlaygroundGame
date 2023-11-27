@@ -31,6 +31,10 @@ public class LevelScrolling : MonoBehaviour
 
     [SerializeField] private GameObject[] playerObjects;
 
+    public bool menuSection = true;
+    public bool checkpointSection;
+    public bool platformingSection;
+
     private void Update()
     {
         if (spaceToStartText != null && !spaceToStartText.isActiveAndEnabled && canStart)
@@ -64,6 +68,7 @@ public class LevelScrolling : MonoBehaviour
             Debug.Log("WinWorking");
             OnWinTest?.Invoke();
         }
+
     }
 
     private bool AreAllPlayersInactive()
@@ -102,6 +107,9 @@ public class LevelScrolling : MonoBehaviour
             // Ensure that the object ends up exactly at the target position
             transform.position = checkpoints[checkpointIndex + 1].transform.position;
             checkpointIndex++;
+            menuSection = false;
+            platformingSection = false;
+            checkpointSection = true;
 
             yield return new WaitForSeconds(safezoneTime);
 
@@ -135,6 +143,10 @@ public class LevelScrolling : MonoBehaviour
             SetJumperControllersActive(true);
 
             countdownText.gameObject.SetActive(false);
+
+            menuSection = false;
+            platformingSection = true;
+            checkpointSection = false;
         }
     }
 

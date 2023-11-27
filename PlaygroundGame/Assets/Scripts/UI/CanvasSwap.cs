@@ -106,6 +106,9 @@ public class CanvasSwap : MonoBehaviour
             bool playerSpawns = playerActive[i];
             playerObjects[i].SetActive(playerSpawns);
         }
+        levelManager.menuSection = false;
+        levelManager.platformingSection = false;
+        levelManager.checkpointSection = true;
     }
 
     public void startGame()
