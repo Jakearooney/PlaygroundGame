@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:PlaygroundGame/Assets/Prefabs/Cube.prefab.meta
+guid: 281fdceb2b976a347afb49574495181a
+========
+guid: 34ba85ffe9f0fb34bacb0621500a7429
+>>>>>>>> ca420b1 (Organised all of the assets into scaled assets ready to merge.):PlaygroundGame/Assets/JordanAssets/Prefabs/LowRockPrefab.prefab.meta
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
