@@ -58,20 +58,35 @@ public class LavaKingController : MonoBehaviour
         {
             Vector3 spawnPosition = hit.point + new Vector3(0, 0, -0.5f);
 
-            if (!isPreviewLocked)
+            if (!isPreviewLocked && canPlace)
             {
-                UpdatePreviewObject(spawnPosition);
+                // Recreate the preview object if it doesn't exist and update its position
+                if (previewObject == null && placementList.Count > 0)
+                {
+                    Obstacle nextObstacle = placementList[0];
+                    previewObject = Instantiate(nextObstacle.prevObj, spawnPosition, Quaternion.identity);
+                }
+                else if (previewObject != null)
+                {
+                    previewObject.transform.position = spawnPosition;
+                }
+
+                // Update material based on placement validity
+                if (previewObject != null)
+                {
+                    Material applicableMaterial = Physics.CheckBox(spawnPosition, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.identity, inverseWallMask) ? badMaterial : goodMaterial;
+                    ApplyMaterialToRenderers(previewObject, applicableMaterial);
+                }
             }
 
-            // Place obstacle on click
             if (Input.GetMouseButtonDown(0) && canPlace)
             {
                 if (!Physics.CheckBox(spawnPosition, new Vector3(0.5f, 0.5f, 0.5f), Quaternion.identity, inverseWallMask))
                 {
                     clickedPosition = spawnPosition;
-                    isPreviewLocked = true; // Lock the preview position
+                    isPreviewLocked = true;
                     ApplyMaterialToRenderers(previewObject, loadMaterial);
-                    canPlace = false; // Disable further placements until the current one is complete
+                    canPlace = false; // Disable further placements
                     StartCoroutine(PlaceObstacleAfterDelay());
                 }
                 else
@@ -82,6 +97,7 @@ public class LavaKingController : MonoBehaviour
         }
         else if (!isPreviewLocked)
         {
+            // Destroy the preview object if the raycast does not hit the wall layer
             DestroyPreviewObject();
         }
     }
@@ -181,7 +197,8 @@ public class LavaKingController : MonoBehaviour
         }
 
         UpdateUI();
-        StartCoroutine(ReadyDelay()); // Start the ready delay after placing the obstacle
+        isPreviewLocked = false; // Unlock the preview position
+        StartCoroutine(ReadyDelay()); // Start the ready delay
     }
 
     private void UpdateUI()
@@ -212,12 +229,9 @@ public class LavaKingController : MonoBehaviour
 
     private IEnumerator ReadyDelay()
     {
-        isPreviewLocked = false; // Unlock the preview position for the next placement
-
         float remainingTime = readyDelay;
         while (remainingTime > 0)
         {
-            // Update the cooldown timer text each frame
             cooldownTimerText.text = remainingTime.ToString("F1") + "s";
             yield return new WaitForSeconds(0.1f);
             remainingTime -= 0.1f;
