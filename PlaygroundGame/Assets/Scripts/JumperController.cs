@@ -158,10 +158,12 @@ public class JumperController : MonoBehaviour
 
     private void RotateModels()
     {
+        float targetYRotation = facingRight ? -60f : -120f;  // Set target rotation based on direction
+
         foreach (var model in spartanModels)
         {
-            // Rotate model 180 degrees around the y-axis
-            model.transform.Rotate(0, 180, 0);
+            // Rotate model to the target Y rotation
+            model.transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
         }
     }
 

@@ -158,19 +158,26 @@ public class LevelScrolling : MonoBehaviour
             {
                 jumperController.enabled = active;
 
-                // If deactivating, also reset the Rigidbody velocity
-                if (!active)
+                // Handle the Rigidbody to pause physics
+                Rigidbody rb = jumperController.GetComponent<Rigidbody>();
+                if (rb != null)
                 {
-                    Rigidbody rb = jumperController.GetComponent<Rigidbody>();
-                    if (rb != null)
+                    if (!active)
                     {
+                        // Disable physics interactions by making Rigidbody kinematic
+                        rb.isKinematic = true;
                         rb.velocity = Vector3.zero; // Resets both linear and angular velocities
                         rb.angularVelocity = Vector3.zero;
+                    }
+                    else
+                    {
+                        // Re-enable physics interactions
+                        rb.isKinematic = false;
                     }
                 }
             }
         }
         lavaKingController.enabled = active;
-        gameStarted = true;
+        gameStarted = active; // Might want to review this line, ensure it aligns with your game logic
     }
 }
